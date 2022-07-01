@@ -2,11 +2,7 @@
 
   <main>
 
-    <div>
-      <h1>Personaggi</h1>
-    </div>
-
-    <div>
+    <div class="card-container">
       <!-- Componente card che clica i personaggi contenuti nel mio Array -->
       <CardComponent
       v-for="(object, index) in this.characters"
@@ -56,5 +52,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+main{
+
+  padding: 50px;
+
+  .card-container{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    width: 80%;
+    margin: 0 auto;
+  }
+
+}
 
 </style>
