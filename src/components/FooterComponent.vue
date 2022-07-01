@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <span>Developer with enthusiasm by Salvatore Olivieri </span>
+    <span>Sviluppato con entusiasmo da Salvatore Olivieri </span>
   </footer>
 </template>
 
