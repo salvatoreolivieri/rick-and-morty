@@ -1,6 +1,7 @@
 <template>
 
-  <div class="character-card">
+  <div
+   class="character-card">
 
     <!-- Immagine: -->
     <div class="img-container">
@@ -9,53 +10,153 @@
 
     <!-- Personaggio: -->
     <div class="card-data">
-      <h2>{{item.name}}</h2>
 
-      <button
-      @click="isModalVisible = true"
-      >
-      Dettagli Personaggio
-      </button>
+        <strong>ID: </strong><span>{{item.id}}</span>
+        <h2>{{item.name}}</h2>
+
+      <!-- Botttone dettagli personaggio: -->
+        <button
+          @click="isModalVisible = true">
+
+          Dettagli Personaggio
+        </button>
+
+        <br>
+
+        <div
+          v-if="!this.favouriteItems && !type">
+
+            <button
+                @click="addToFavourite(item), showPopUpAddFavourite()"
+      
+                id="favourite-button">
+      
+                  Aggiungi ai preferiti
+            </button>
+
+        </div>
+
+        <div
+          v-else>
+
+          <!-- Bottone rimuovi preferiti: -->
+            <button
+
+              v-if="!this.favouriteItems.includes(item.id) && type"
+
+              @click="removeFavourite(item)"
+
+              id="favourite-button">
+
+                Rimuovi dai preferiti
+
+            </button>
+
+
+          <!-- Bottone aggiungi preferiti: -->
+            <button class="already-favourite-label"
+
+              v-else
+
+              @click="addToFavourite(item), showPopUpAddFavourite()"
+
+              id="favourite-button">
+
+              Aggiungi ai preferiti
+
+            </button>
+
+        </div>
 
     </div>
 
     <!-- Modal con i dati: -->
     <div
-    
       :class="isModalVisible ? '' : 'hidden' "
       class="modal">
 
       <div 
         @click="isModalVisible = false"
         id="backdrop" class="backdrop">
-
       </div>
 
       <div class="details-modal">
 
         <div class="close-button-area">
+
           <button
-          @click="isModalVisible = false"
-          class="esc">esc</button>
+            @click="isModalVisible = false"
+            class="esc">
+
+              esc
+          </button>
+
         </div>
 
         <div class="title-container">
-          
-          <img :src="`${item.image}`" :alt="item.name" ><br>
+
+          <img
+            :src="`${item.image}`"
+            :alt="item.name" >
+            
+          <br>
 
           <div>
-            <h2>{{item.name}}</h2><br>
-            <strong>Specie: </strong><span>{{item.species}}</span><br>
-            <strong>Gender: </strong><span>{{item.gender}}</span><br>
-            <strong>Status: </strong><span>{{item.status}}</span><br>
+
+            <strong>ID: </strong><span>{{item.id}}</span><br>
+            <h2>{{item.name}}</h2>
+
+            <br>
+
+            <strong>Specie: </strong><span>{{item.species}}</span>
+
+            <br>
+
+            <strong>Gender: </strong><span>{{item.gender}}</span>
+
+            <br>
+
+            <strong>Status: </strong><span>{{item.status}}</span>
+
+            <br>
+
           </div>
 
         </div>
-        
+
       </div>
 
     </div> 
-    
+
+    <!-- Modal che annuncia l'aggiunta ai preferiti -->
+    <div
+      :class="addedToFavourite ? '' : 'hidden' "
+      class="modal">
+
+      <div 
+        @click="addedToFavourite = false"
+        id="backdrop" class="backdrop">
+      </div>
+
+      <div class="details-modal favourite">
+
+        <div class="title-container">
+
+          <div>
+
+            <h2>{{item.name}} aggiunto ai preferiti</h2>
+
+            <br>
+
+            <span>Scorri fino in fondo per vedere tutti i preferiti.</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div> 
 
   </div>
 
@@ -65,14 +166,54 @@
 export default {
   name:'CardComponent.vue',
   props: {
-    item: Object
+    item: Object,
+    favouriteItems: Array,
+    type: Boolean
   },
 
   data(){
     return{
-      isModalVisible: false
+      isModalVisible: false, // Utilizzo questo booleano per mostrare e nascondere il modal con i dettagli del personaggio.
+
+      addedToFavourite: false, // Utilizzo questo booleano per mostrare e nascondere la modal che annuncia l'aggiunta di un personaggio ai preferiti.
+
+      removeFromFavourite: false, // Utilizzo questo booleano per mostrare e nascondere la modal che annuncia la rimozione di un personaggio dai preferiti.
+
     }
-  }
+  },
+
+  methods:{
+
+    addToFavourite(item){
+
+      // Passo i parametri dal figlio al genitore per popolare l'array dei preferiti che ciclerò nel genitore:
+      this.$emit('favourite', item);
+
+      //console.log('aggiunto ai preferiti questo oggetto: ', item );
+
+    },
+
+    showPopUpAddFavourite(){
+
+      // Rendo vero questo booleano per mostrare il modal che annuncia l'aggiunta ai preferiti.
+      this.addedToFavourite = true;
+
+      // Creo un timer che rende falso il precedente booleano per far scomparire automaticamente il modal.
+      setTimeout(() => {
+        this.addedToFavourite = false;
+      }, 2000);
+    },
+
+    removeFavourite(item){
+
+      this.$emit('removeFavourite', item);
+
+      // console.log(this.favouriteItems?.indexOf(item));
+
+    }
+
+  },
+
 }
 </script>
 
@@ -112,14 +253,24 @@ export default {
       border: none;
       border-radius: 5px;
 
-      box-shadow: 0px 1px 5px 1px #2a2a2a;
+      cursor: pointer;
 
-      cursor: url(@/assets/img/portal-gun.cur);
+      box-shadow: 0px 1px 5px 1px #2a2a2a;
 
       &:active{
         transform: scale(0.9);
       }
 
+    }
+
+    #favourite-button{
+      background-color: lightgreen;
+      color: black;
+    }
+
+    .already-favourite-label{
+      display: inline-block;
+      margin-top: 10px;
     }
 
   }
@@ -172,6 +323,7 @@ export default {
           background-color: #F9FAFB;
 
           padding: 4px;
+          margin-bottom: 10px;
           width: 40px;
           border: 1px solid #dee2e6;
           border-radius: 5px;
@@ -206,8 +358,20 @@ export default {
         strong{
           line-height: 1.6;
         }
+
       }
       
+
+    }
+    .favourite{
+      background-color: #3FC47B;
+      box-shadow: 0px 1px 5px 1px #2a2a2a;
+    }
+
+    .removed-favourite{
+      background-color: grey;
+      color: white;
+      box-shadow: 0px 1px 5px 1px #2a2a2a;
 
     }
 

@@ -7,7 +7,15 @@
   </div>
 
   <div>
-    <input type="text" placeholder="Cerca personaggio..">
+
+    <input
+
+      @keyup="startEmit(inputToSearch)"
+      v-model="inputToSearch"
+
+      type="text"
+      placeholder="Cerca personaggio..">
+
   </div>
 
 </header>
@@ -16,7 +24,20 @@
 
 <script>
 export default {
-  name:'HeaderComponent.vue'
+  name:'HeaderComponent.vue',
+
+  data(){
+    return{
+      inputToSearch: ''
+    }
+  },
+
+  methods:{
+    startEmit(inputToSearch){
+      this.$emit('search', inputToSearch)
+    }
+  }
+
 }
 </script>
 

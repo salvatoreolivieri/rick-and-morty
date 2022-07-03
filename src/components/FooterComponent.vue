@@ -24,7 +24,7 @@ footer{
   align-items: center;
 
   border-top: 1px solid $border-color;
-
+  text-align: center;
 }
 
 </style>
