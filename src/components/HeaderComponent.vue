@@ -35,6 +35,7 @@ export default {
   methods:{
     startEmit(inputToSearch){
       this.$emit('search', inputToSearch)
+      inputToSearch = ''
     }
   }
 

@@ -44,7 +44,7 @@
         :item="object"
         :type="false"
         />
-        
+
     </div>
 
     <!-- Personaggi Preferiti -->
@@ -127,18 +127,16 @@ export default {
     addToFavourite(item){
 
         if (this.favouriteCharacters.includes(item)) {
+
           //console.log('utente già nei preferiti');
+
         } else{
 
+          // Aggiungo l'elemento al mio array dei preferiti che poi ciclerò:
           this.favouriteCharacters.push(item)
-
 
         }
 
-        // Aggiungo l'elemento al mio array dei preferiti che poi ciclerò:
-        // this.favouriteCharacters.push(item)
-
-        //console.log('questo elemento è stato aggiunto ai preferiti:', this.favouriteCharacters);
     },
 
     //Rimuovo l'elemento ai preferiti
